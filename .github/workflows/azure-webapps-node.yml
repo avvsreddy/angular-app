@@ -16,7 +16,7 @@
 # For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
-
+# Error: Deployment Failed, Error: No credentials found. Add an Azure login action before this action. For more details refer https://github.com/azure/login
 on:
   push:
     branches: [ "main" ]
@@ -64,6 +64,8 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+    - uses: actions/checkout@v4   # <-- add this
+
     - name: Download artifact from build job
       uses: actions/download-artifact@v4
       with:

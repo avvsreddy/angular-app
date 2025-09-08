@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies and Build Angular
         run: |
           npm ci
-          npm run build --configuration production --base-href /
+          npm run build --configuration production --base-href 
 
       # Step 4: Deploy to Azure App Service
       - name: Deploy to Azure Web App
@@ -40,3 +40,4 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+

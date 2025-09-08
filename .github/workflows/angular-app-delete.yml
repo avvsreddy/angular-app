@@ -1,0 +1,42 @@
+name: Deploy Angular 19 App to Azure Web App
+
+on:
+  push:
+    branches:
+      - main
+
+# Configure environment variables
+env:
+  AZURE_WEBAPP_NAME: 'angular-app-delete' # Replace with your App Service name
+  AZURE_WEBAPP_PACKAGE_PATH: './dist/angular-app/browser' # Replace with the correct path to your build output
+  NODE_VERSION: '18.x' # Node.js version to use
+  
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout GitHub Action
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      # Step 3: Install dependencies and build the Angular app
+      - name: Install dependencies and Build Angular
+        run: |
+          npm ci
+          npm run build --configuration production --base-href /
+
+      # Step 4: Deploy to Azure App Service
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
